@@ -1,0 +1,44 @@
+# =============================================================================
+# DOCKER IGNORE FILE
+# =============================================================================
+
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Environment files (sensitive data)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Documentation
+*.md
+!README.md
+
+# Maven wrapper (not needed in Docker, we use Maven image)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Test files
+src/test/
+
+# Misc
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db

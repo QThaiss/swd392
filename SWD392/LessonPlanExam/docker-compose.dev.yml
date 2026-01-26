@@ -1,0 +1,38 @@
+version: '3.8'
+
+# =============================================================================
+# DOCKER COMPOSE FOR DEVELOPMENT (DATABASE ONLY)
+# =============================================================================
+# Use this file to run only PostgreSQL while developing locally
+# Command: docker-compose -f docker-compose.dev.yml up -d
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database for Development
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: lesson_plan_exam_db_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lesson_plan_exam}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-lesson_plan_exam}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+volumes:
+  postgres_data_dev:
+    driver: local

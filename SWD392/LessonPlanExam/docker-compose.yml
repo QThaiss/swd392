@@ -1,0 +1,77 @@
+version: '3.8'
+
+# =============================================================================
+# DOCKER COMPOSE FOR LESSON PLAN EXAM APPLICATION
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: lesson_plan_exam_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lesson_plan_exam}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-lesson_plan_exam}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # Spring Boot Application
+  # ---------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lesson_plan_exam_app
+    restart: unless-stopped
+    environment:
+      # Database Configuration
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-lesson_plan_exam}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET:-YourSuperSecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLongForHS256Algorithm}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-604800000}
+      # Email Configuration
+      - MAIL_USERNAME=${MAIL_USERNAME:-your-email@gmail.com}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-your-app-password}
+      # Server Configuration
+      - SERVER_PORT=5206
+    ports:
+      - "${SERVER_PORT:-5206}:5206"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+volumes:
+  postgres_data:
+    driver: local
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+networks:
+  app-network:
+    driver: bridge
