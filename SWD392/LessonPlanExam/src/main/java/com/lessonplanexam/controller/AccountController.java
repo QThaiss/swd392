@@ -22,14 +22,14 @@ public class AccountController {
     }
 
     @PostMapping("/register-student")
-    public ResponseEntity<BaseResponse<AccountDTO>> registerStudent(@Valid @RequestBody RegisterRequest request) {
-        BaseResponse<AccountDTO> response = accountService.registerStudent(request);
+    public ResponseEntity<BaseResponse<String>> registerStudent(@Valid @RequestBody RegisterRequest request) {
+        BaseResponse<String> response = accountService.registerStudent(request);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @PostMapping("/register-teacher")
-    public ResponseEntity<BaseResponse<AccountDTO>> registerTeacher(@Valid @RequestBody RegisterRequest request) {
-        BaseResponse<AccountDTO> response = accountService.registerTeacher(request);
+    public ResponseEntity<BaseResponse<String>> registerTeacher(@Valid @RequestBody RegisterRequest request) {
+        BaseResponse<String> response = accountService.registerTeacher(request);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
@@ -48,6 +48,26 @@ public class AccountController {
     @PostMapping("/change-password")
     public ResponseEntity<BaseResponse<String>> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         BaseResponse<String> response = accountService.changePassword(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-account")
+    public ResponseEntity<BaseResponse<AccountDTO>> verifyAccount(@Valid @RequestBody VerifyAccountRequest request) {
+        BaseResponse<AccountDTO> response = accountService.verifyAccount(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<BaseResponse<String>> logout(@RequestBody LogoutRequest request) {
+        // We can use request.getRefreshToken() if needed, but for now just clear
+        // current context
+        BaseResponse<String> response = accountService.logout(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<BaseResponse<LoginResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        BaseResponse<LoginResponse> response = accountService.refreshToken(request);
         return ResponseEntity.ok(response);
     }
 }

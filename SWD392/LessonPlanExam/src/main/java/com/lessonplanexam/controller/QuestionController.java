@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/questions")
 @RequiredArgsConstructor
@@ -51,5 +53,14 @@ public class QuestionController {
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public BaseResponse<Void> delete(@PathVariable Integer id) {
         return questionService.delete(id);
+    }
+
+    // New endpoint for getting questions by difficulty
+    @GetMapping("/bank/{bankId}/difficulty/{difficultyLevel}")
+    @PreAuthorize("isAuthenticated()")
+    public BaseResponse<List<QuestionDTO>> getByBankAndDifficulty(
+            @PathVariable Integer bankId,
+            @PathVariable Integer difficultyLevel) {
+        return questionService.getByBankAndDifficulty(bankId, difficultyLevel);
     }
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum EAttemptStatus {
     IN_PROGRESS(1),
     SUBMITTED(2),
+    COMPLETED(2), // Alias for SUBMITTED if that's the intention, or separate? Let's Assume
+                  // COMPLETED = 2 for now, as SUBMITTED implies done.
     GRADED(3),
     EXPIRED(4);
 

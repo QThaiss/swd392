@@ -21,4 +21,7 @@ public interface LessonPlanRepository extends JpaRepository<LessonPlan, Integer>
 
     @Query("SELECT lp FROM LessonPlan lp WHERE lp.gradeLevel = :gradeLevel AND lp.deletedAt IS NULL")
     Page<LessonPlan> findByGradeLevel(@Param("gradeLevel") Integer gradeLevel, Pageable pageable);
+
+    @Query("SELECT COUNT(lp) FROM LessonPlan lp WHERE lp.createdByTeacher.accountId = :teacherId AND lp.deletedAt IS NULL")
+    long countByTeacherId(@Param("teacherId") Integer teacherId);
 }

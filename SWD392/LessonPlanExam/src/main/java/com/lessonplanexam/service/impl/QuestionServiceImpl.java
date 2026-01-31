@@ -122,13 +122,17 @@ public class QuestionServiceImpl implements QuestionService {
 
                 if (question.getQuestionType() == EQuestionType.MULTIPLE_CHOICE) {
                         List<QuestionMultipleChoiceAnswer> mcqAnswers = answers.stream()
-                                        .map(a -> QuestionMultipleChoiceAnswer.builder()
-                                                        .question(question)
-                                                        .answerText(a.getAnswerText())
-                                                        .isCorrect(a.getIsCorrect())
-                                                        .explanation(a.getExplanation())
-                                                        .orderIndex(a.getOrderIndex())
-                                                        .build())
+                                        .map(a -> {
+                                                System.out.println("DEBUG: Saving Answer: " + a.getAnswerText()
+                                                                + " | isCorrect: " + a.getIsCorrect());
+                                                return QuestionMultipleChoiceAnswer.builder()
+                                                                .question(question)
+                                                                .answerText(a.getAnswerText())
+                                                                .isCorrect(Boolean.TRUE.equals(a.getIsCorrect()))
+                                                                .explanation(a.getExplanation())
+                                                                .orderIndex(a.getOrderIndex())
+                                                                .build();
+                                        })
                                         .collect(Collectors.toList());
                         question.getMultipleChoiceAnswers().addAll(mcqAnswers);
                 } else if (question.getQuestionType() == EQuestionType.FILL_BLANK) {
@@ -186,5 +190,14 @@ public class QuestionServiceImpl implements QuestionService {
                                 .isActive(question.getIsActive())
                                 .answers(answerDTOs)
                                 .build();
+        }
+
+        @Override
+        public BaseResponse<List<QuestionDTO>> getByBankAndDifficulty(Integer bankId, Integer difficultyLevel) {
+                List<Question> questions = questionRepository.findByBankIdAndDifficulty(bankId, difficultyLevel);
+                List<QuestionDTO> dtos = questions.stream()
+                                .map(this::mapToDTO)
+                                .collect(Collectors.toList());
+                return BaseResponse.success(dtos);
         }
 }

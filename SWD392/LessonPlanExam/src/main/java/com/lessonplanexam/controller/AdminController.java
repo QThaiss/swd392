@@ -35,4 +35,10 @@ public class AdminController {
     public ResponseEntity<BaseResponse<AccountDTO>> toggleAccountStatus(@PathVariable Integer id) {
         return ResponseEntity.ok(accountService.toggleAccountStatus(id));
     }
+
+    @PostMapping("/accounts/teacher")
+    public ResponseEntity<BaseResponse<AccountDTO>> createTeacher(
+            @RequestBody com.lessonplanexam.dto.account.RegisterRequest request) {
+        return ResponseEntity.ok(accountService.createTeacherByAdmin(request));
+    }
 }

@@ -16,4 +16,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     boolean existsByEmail(String email);
 
     boolean existsByNormalizedEmail(String normalizedEmail);
+
+    @org.springframework.data.jpa.repository.Query("SELECT COUNT(a) FROM Account a WHERE a.roleEnum = :roleEnum")
+    long countByRoleEnum(@org.springframework.data.repository.query.Param("roleEnum") Integer roleEnum);
 }

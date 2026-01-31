@@ -53,6 +53,12 @@ public class ExamAttempt {
     @Column(name = "score_percentage", precision = 5, scale = 2)
     private BigDecimal scorePercentage = BigDecimal.ZERO;
 
+    @Column(name = "correct_count")
+    private Integer correctCount = 0;
+
+    @Column(name = "total_questions")
+    private Integer totalQuestions = 0;
+
     @Column(name = "status_enum")
     private Integer statusEnum = 1;
 

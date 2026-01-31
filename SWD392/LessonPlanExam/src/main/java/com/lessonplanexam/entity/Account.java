@@ -49,6 +49,21 @@ public class Account {
     @Column(name = "email_verified")
     private Boolean emailVerified = false;
 
+    @Column(name = "failed_login_attempts")
+    private Integer failedLoginAttempts = 0;
+
+    @Column(name = "lock_time")
+    private OffsetDateTime lockTime;
+
+    @Column(name = "otp_code")
+    private String otpCode;
+
+    @Column(name = "otp_expiration")
+    private OffsetDateTime otpExpiration;
+
+    @Column(name = "current_refresh_token")
+    private String currentRefreshToken;
+
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 

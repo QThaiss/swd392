@@ -6,6 +6,8 @@ import com.lessonplanexam.dto.question.QuestionDTO;
 import com.lessonplanexam.dto.question.CreateQuestionRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface QuestionService {
     BaseResponse<QuestionDTO> create(CreateQuestionRequest request);
 
@@ -16,4 +18,7 @@ public interface QuestionService {
     BaseResponse<QuestionDTO> update(Integer id, CreateQuestionRequest request);
 
     BaseResponse<Void> delete(Integer id);
+
+    // New method for getting questions by difficulty
+    BaseResponse<List<QuestionDTO>> getByBankAndDifficulty(Integer bankId, Integer difficultyLevel);
 }

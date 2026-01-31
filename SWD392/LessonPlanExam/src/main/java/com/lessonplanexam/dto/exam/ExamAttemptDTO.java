@@ -25,4 +25,7 @@ public class ExamAttemptDTO {
     private BigDecimal maxScore;
     private BigDecimal scorePercentage;
     private EAttemptStatus status;
+    private Integer correctCount;
+    private Integer incorrectCount;
+    private Integer totalQuestions;
 }

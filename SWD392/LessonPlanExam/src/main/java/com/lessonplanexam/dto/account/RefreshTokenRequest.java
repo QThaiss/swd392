@@ -1,14 +1,10 @@
 package com.lessonplanexam.dto.account;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class RefreshTokenRequest {
-
-    @NotBlank(message = "Refresh token is required")
+    @NotBlank
     private String refreshToken;
 }

@@ -1,10 +1,7 @@
 package com.lessonplanexam.service;
 
 import com.lessonplanexam.dto.common.BaseResponse;
-import com.lessonplanexam.dto.exam.CreateExamRequest;
-import com.lessonplanexam.dto.exam.ExamAttemptDTO;
-import com.lessonplanexam.dto.exam.ExamDTO;
-import com.lessonplanexam.dto.exam.SubmitExamRequest;
+import com.lessonplanexam.dto.exam.*;
 
 public interface ExamService {
 
@@ -32,4 +29,21 @@ public interface ExamService {
         BaseResponse<ExamAttemptDTO> startExam(Integer examId);
 
         BaseResponse<ExamAttemptDTO> submitExam(Integer examId, SubmitExamRequest request);
+
+        BaseResponse<java.util.List<ExamAttemptDTO>> getMyAttempts(Integer examId);
+
+        // New methods for Exam Question Management
+        BaseResponse<ExamQuestionsResponse> addQuestionsToExam(Integer examId, AddQuestionsToExamRequest request);
+
+        BaseResponse<ExamQuestionsResponse> getExamQuestions(Integer examId);
+
+        BaseResponse<?> removeQuestionFromExam(Integer examId, Integer questionId);
+
+        // Publish / Draft Status
+        BaseResponse<ExamDTO> publish(Integer examId);
+
+        BaseResponse<ExamDTO> saveToDraft(Integer examId);
+
+        // Create from Matrix
+        BaseResponse<ExamDTO> createFromMatrix(CreateExamFromMatrixRequest request);
 }

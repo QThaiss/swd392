@@ -21,4 +21,10 @@ public interface ExamRepository extends JpaRepository<Exam, Integer> {
 
     @Query("SELECT e FROM Exam e WHERE e.statusEnum = :status AND e.deletedAt IS NULL")
     Page<Exam> findByStatus(@Param("status") Integer status, Pageable pageable);
+
+    @Query("SELECT COUNT(e) FROM Exam e WHERE e.createdByTeacher.accountId = :teacherId AND e.deletedAt IS NULL")
+    long countByTeacherId(@Param("teacherId") Integer teacherId);
+
+    @Query("SELECT COUNT(e) FROM Exam e WHERE e.statusEnum = :status AND e.deletedAt IS NULL")
+    long countByStatus(@Param("status") Integer status);
 }
