@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --background: 255 255 255; /* White base, but we'll overlay gradient */
+  --foreground: 15 23 42; /* Slate 900 */
+  --card: 255 255 255;
+  --card-foreground: 15 23 42;
+  --popover: 255 255 255;
+  --popover-foreground: 15 23 42;
+  /* Updated to Blue/Teal from Logo */
+  --primary: 0 114 255; /* #0072ff */
+  --primary-foreground: 255 255 255;
+  --secondary: 241 245 249;
+  --secondary-foreground: 15 23 42;
+  --muted: 241 245 249;
+  --muted-foreground: 100 116 139;
+  --accent: 253 219 146; /* #fddb92 from logo accent */
+  --accent-foreground: 15 23 42;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+  --border: 226 232 240;
+  --input: 226 232 240;
+  --ring: 0 114 255;
+  --radius: 1rem;
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--border));
+  }
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    /* Cyan/Blue Gradient Background */
+    background:
+      radial-gradient(
+        circle at top left,
+        rgba(0, 198, 255, 0.4),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at bottom right,
+        rgba(0, 114, 255, 0.4),
+        transparent 40%
+      ),
+      linear-gradient(135deg, #e0f7fa 0%, #eef2f3 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Logic */
+  .glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl;
+  }
+
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-md border border-white/50 shadow-lg;
+    box-shadow: 0 8px 32px 0 rgba(0, 114, 255, 0.1);
+  }
+
+  /* Interactive Elements */
+  .btn-primary {
+    @apply bg-blue-600 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700 hover:shadow-blue-500/40 transition-all duration-300;
+  }
+
+  .input-glass {
+    @apply bg-white/50 border-white/50 focus:bg-white/80 focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-400;
+  }
+}
