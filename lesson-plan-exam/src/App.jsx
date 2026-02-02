@@ -50,6 +50,13 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/verify-otp" element={<VerifyOTPPage />} />
           
+          {/* TakeExam - Fullscreen without Layout */}
+          <Route path="/exams/:id/take" element={
+            <ProtectedRoute>
+              <TakeExam />
+            </ProtectedRoute>
+          } />
+          
           <Route path="/" element={
             <ProtectedRoute>
               <Layout />
@@ -60,7 +67,6 @@ function App() {
             <Route path="exams/create" element={<CreateExam />} />
             <Route path="exams/:id/edit" element={<CreateExam />} />
             <Route path="exams/:id/preview" element={<ExamPreview />} />
-            <Route path="exams/:id/take" element={<TakeExam />} />
             <Route path="lesson-plans" element={<LessonPlanList />} />
             <Route path="lesson-plans/:id" element={<LessonPlanDetail />} />
             <Route path="question-banks" element={<QuestionBankList />} />

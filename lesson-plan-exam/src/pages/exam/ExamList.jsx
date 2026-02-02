@@ -211,9 +211,14 @@ const ExamAttemptHistory = ({ isOpen, onClose, examId, examTitle, passThreshold 
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'COMPLETED': return 'bg-emerald-100 text-emerald-700';
-            case 'IN_PROGRESS': return 'bg-yellow-100 text-yellow-700';
-            default: return 'bg-slate-100 text-slate-600';
+            case 'COMPLETED': 
+            case 'SUBMITTED':
+            case 'GRADED':
+                return 'bg-emerald-100 text-emerald-700';
+            case 'IN_PROGRESS': 
+                return 'bg-yellow-100 text-yellow-700';
+            default: 
+                return 'bg-slate-100 text-slate-600';
         }
     };
 
@@ -231,14 +236,19 @@ const ExamAttemptHistory = ({ isOpen, onClose, examId, examTitle, passThreshold 
                     </div>
                 ) : attempts.length === 0 ? (
                     <div className="text-center py-8">
-                        <p className="text-slate-500">Bạn chưa làm bài thi này.</p>
+                        <p className="text-slate-500">You haven't taken this exam yet.</p>
                     </div>
                 ) : (
                     <div className="space-y-3">
                         {attempts.map((attempt, index) => {
                             const score = attempt.scorePercentage ?? attempt.score ?? 0;
                             const passed = score >= (passThreshold || 50);
-                            const isCompleted = attempt.status === 'COMPLETED';
+                            const isCompleted = ['COMPLETED', 'SUBMITTED', 'GRADED'].includes(attempt.status);
+                            
+                            // Calculate counts from available data
+                            const totalQuestions = attempt.totalQuestions || 0;
+                            const correctCount = attempt.correctCount || 0;
+                            const incorrectCount = attempt.incorrectCount ?? (totalQuestions - correctCount);
                             
                             return (
                                 <div
@@ -252,10 +262,10 @@ const ExamAttemptHistory = ({ isOpen, onClose, examId, examTitle, passThreshold 
                                     {/* Header with attempt number and status */}
                                     <div className="flex items-center justify-between mb-3">
                                         <span className="font-semibold text-slate-800">
-                                            Lần {attempt.attemptNumber || (attempts.length - index)}
+                                            Attempt #{attempt.attemptNumber || (attempts.length - index)}
                                         </span>
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(attempt.status)}`}>
-                                            {attempt.status === 'COMPLETED' ? 'Đã nộp' : attempt.status === 'IN_PROGRESS' ? 'Đang làm' : attempt.status}
+                                            {['COMPLETED', 'SUBMITTED', 'GRADED'].includes(attempt.status) ? 'Submitted' : attempt.status === 'IN_PROGRESS' ? 'In Progress' : attempt.status}
                                         </span>
                                     </div>
 
@@ -270,20 +280,23 @@ const ExamAttemptHistory = ({ isOpen, onClose, examId, examTitle, passThreshold 
                                                     <span className={`px-2 py-0.5 rounded text-xs font-bold ${
                                                         passed ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'
                                                     }`}>
-                                                        {passed ? '✓ ĐẬU' : '✗ RỚT'}
+                                                        {passed ? '✓ PASSED' : '✗ FAILED'}
                                                     </span>
                                                 </div>
-                                                {attempt.totalScore !== undefined && (
+                                                {/* Always show points if available */}
+                                                {(attempt.totalScore !== undefined || attempt.maxScore !== undefined) && (
                                                     <p className="text-sm text-slate-500 mt-1">
-                                                        Điểm: {attempt.totalScore} / {attempt.maxScore || '?'} điểm
+                                                        Score: {attempt.totalScore ?? 0} / {attempt.maxScore || '?'} pts
                                                     </p>
                                                 )}
-                                                {(attempt.correctCount !== undefined || attempt.incorrectCount !== undefined) && (
-                                                    <div className="flex gap-3 mt-1 text-sm">
-                                                        <span className="text-emerald-600">✓ {attempt.correctCount || 0} đúng</span>
-                                                        <span className="text-red-500">✗ {attempt.incorrectCount || 0} sai</span>
-                                                    </div>
-                                                )}
+                                                {/* Always show correct/incorrect counts */}
+                                                <div className="flex gap-3 mt-1 text-sm">
+                                                    <span className="text-emerald-600">✓ {correctCount} correct</span>
+                                                    <span className="text-red-500">✗ {incorrectCount} wrong</span>
+                                                    {totalQuestions > 0 && (
+                                                        <span className="text-slate-500">/ {totalQuestions} questions</span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -291,11 +304,11 @@ const ExamAttemptHistory = ({ isOpen, onClose, examId, examTitle, passThreshold 
                                     {/* Time info */}
                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
-                                            <span className="text-slate-500">Bắt đầu:</span>
+                                            <span className="text-slate-500">Started:</span>
                                             <p className="font-medium text-slate-700">{formatDate(attempt.startedAt)}</p>
                                         </div>
                                         <div>
-                                            <span className="text-slate-500">Nộp bài:</span>
+                                            <span className="text-slate-500">Submitted:</span>
                                             <p className="font-medium text-slate-700">{formatDate(attempt.submittedAt)}</p>
                                         </div>
                                     </div>

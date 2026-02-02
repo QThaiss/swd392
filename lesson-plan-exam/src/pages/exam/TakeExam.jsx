@@ -54,7 +54,7 @@ const TakeExam = () => {
                     if (errorMsg.toLowerCase().includes('max attempts') || 
                         errorMsg.toLowerCase().includes('đã làm') ||
                         startResponse.statusCode === 403) {
-                        setError('Bạn đã hoàn thành tất cả các lượt làm bài cho bài thi này. (Max attempts reached)');
+                        setError('You have completed all attempts for this exam. (Max attempts reached)');
                         return;
                     }
                     throw new Error(errorMsg || 'Failed to start exam');
@@ -102,9 +102,9 @@ const TakeExam = () => {
                 // Handle 403 error specially
                 if (err.response?.status === 403) {
                     if (errorMsg.toLowerCase().includes('max attempts')) {
-                        setError('Bạn đã hoàn thành tất cả các lượt làm bài cho bài thi này.');
+                        setError('You have completed all attempts for this exam.');
                     } else {
-                        setError('Bạn không có quyền truy cập bài thi này. ' + errorMsg);
+                        setError('You do not have permission to access this exam. ' + errorMsg);
                     }
                 } else {
                     setError(errorMsg);
@@ -162,7 +162,10 @@ const TakeExam = () => {
     const handleSubmit = () => {
         if (submitting) return;
         
-        const unanswered = questions.filter(q => !answers[q.id]).length;
+        const unanswered = questions.filter(q => {
+            const qId = q.question?.id || q.id;
+            return !answers[qId];
+        }).length;
         if (unanswered > 0) {
             setConfirmModal({
                 open: true,
@@ -290,9 +293,9 @@ const TakeExam = () => {
     }
 
     return (
-        <div className="space-y-4">
-            {/* Timer Header */}
-            <div className="sticky top-0 z-30 -mx-6 -mt-6 px-6 py-4 bg-white/80 backdrop-blur-lg border-b border-slate-200 shadow-sm">
+        <div className="fixed inset-0 z-50 bg-slate-100 overflow-auto">
+            {/* Timer Header - Fixed at top */}
+            <div className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-lg font-bold text-slate-900">{exam?.title || 'Exam'}</h1>
@@ -307,7 +310,9 @@ const TakeExam = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-12 gap-6">
+            {/* Main Content - with top padding for fixed header */}
+            <div className="pt-20 pb-6 px-6">
+                <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
                 {/* Question Panel */}
                 <div className="col-span-9">
                     <Card>
@@ -397,7 +402,7 @@ const TakeExam = () => {
 
                 {/* Question Navigator */}
                 <div className="col-span-3">
-                    <Card className="sticky top-24">
+                    <Card className="sticky top-4">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-sm">Question Navigator</CardTitle>
                         </CardHeader>
@@ -465,6 +470,7 @@ const TakeExam = () => {
                         </CardContent>
                     </Card>
                 </div>
+            </div>
             </div>
 
             
