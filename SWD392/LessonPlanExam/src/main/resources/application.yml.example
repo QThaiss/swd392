@@ -7,8 +7,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/lesson_plan_exam
-    username: postgres
-    password: postgres
+    username: YOUR_DB_USERNAME
+    password: YOUR_DB_PASSWORD
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: lquocthai17092004@gmail.com
-    password: kztjywgdhchyaxun
+    username: YOUR_EMAIL@gmail.com
+    password: YOUR_APP_PASSWORD
     properties:
       mail:
         smtp:
@@ -45,4 +45,4 @@ logging:
     org.springframework.security: INFO
 
 gemini:
-  api-key: AIzaSyByzmZBQX8JcHQ5t6dmXJIkyAd0T2Mvy68
+  api-key: YOUR_GEMINI_API_KEY

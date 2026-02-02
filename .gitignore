@@ -10,6 +10,14 @@
 .env.local
 .env.*.local
 
+# Spring Boot application configs with secrets
+**/src/main/resources/application.yml
+**/src/main/resources/application.properties
+**/src/main/resources/application-*.yml
+**/src/main/resources/application-*.properties
+!**/src/main/resources/application.yml.example
+!**/src/main/resources/application.properties.example
+
 # =============================================================================
 # JAVA / SPRING BOOT / MAVEN
 # =============================================================================
