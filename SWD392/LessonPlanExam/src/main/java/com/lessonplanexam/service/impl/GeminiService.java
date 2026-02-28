@@ -115,7 +115,23 @@ public class GeminiService implements AiService {
         if (cleaned.endsWith("```")) {
             cleaned = cleaned.substring(0, cleaned.length() - 3);
         }
-        return cleaned.trim();
+
+        cleaned = cleaned.trim();
+
+        // Fix invalid escape sequences that Gemini might generate
+        // Replace invalid backslash-x escape sequences (e.g., \x20) with space
+        // In Java regex: \\\\ matches a literal backslash, x matches 'x'
+        Pattern hexEscape = Pattern.compile("\\\\x[0-9a-fA-F]{2}");
+        cleaned = hexEscape.matcher(cleaned).replaceAll(" ");
+
+        // Replace invalid single-character escapes that are not valid JSON escapes
+        // Valid JSON escapes: backslash followed by: " or backslash or / or b or f or n
+        // or r or t or uXXXX
+        // This removes the backslash before invalid escape chars
+        Pattern invalidEscape = Pattern.compile("\\\\([^\"\\\\bfnrtu/])");
+        cleaned = invalidEscape.matcher(cleaned).replaceAll("$1");
+
+        return cleaned;
     }
 
     private String buildLessonPlanPrompt(AiLessonPlanRequest request) {
