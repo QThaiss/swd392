@@ -25,6 +25,12 @@ public class Student {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Column(name = "student_code", unique = true)
+    private String studentCode;
+
+    @Column(name = "major")
+    private String major;
+
     @Column(name = "is_active")
     private Boolean isActive = true;
 

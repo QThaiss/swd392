@@ -14,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.OffsetDateTime;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
+
+    private static final SecureRandom OTP_RANDOM = new SecureRandom();
 
     private final AccountRepository accountRepository;
     private final StudentRepository studentRepository;
@@ -95,13 +97,18 @@ public class AccountService {
         account.setRole(EUserRole.STUDENT);
 
         // OTP Generation
-        String otp = String.format("%06d", new Random().nextInt(999999));
+        String otp = String.format("%06d", OTP_RANDOM.nextInt(1_000_000));
         account.setOtpCode(otp);
         account.setOtpExpiration(OffsetDateTime.now().plusMinutes(10));
 
         account = accountRepository.saveAndFlush(account);
 
-        Student student = Student.builder().account(account).isActive(true).build();
+        Student student = Student.builder()
+                .account(account)
+                .studentCode(request.getStudentCode())
+                .major(request.getMajor())
+                .isActive(true)
+                .build();
         studentRepository.save(student);
 
         // Send Email
@@ -127,7 +134,7 @@ public class AccountService {
         account.setRole(EUserRole.TEACHER);
 
         // OTP Generation
-        String otp = String.format("%06d", new Random().nextInt(999999));
+        String otp = String.format("%06d", OTP_RANDOM.nextInt(1_000_000));
         account.setOtpCode(otp);
         account.setOtpExpiration(OffsetDateTime.now().plusMinutes(10));
 

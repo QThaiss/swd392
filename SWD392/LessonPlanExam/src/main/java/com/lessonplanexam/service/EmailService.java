@@ -1,6 +1,5 @@
 package com.lessonplanexam.service;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +19,6 @@ public class EmailService {
     private String fromEmail;
 
     public void sendOtpEmail(String toEmail, String otpCode) {
-        // Log OTP to console for manual verification support
-        System.out.println("==================================================");
-        System.out.println("MANUAL VERIFICATION OTP FOR: " + toEmail);
-        System.out.println("OTP CODE: " + otpCode);
-        System.out.println("==================================================");
-
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -50,9 +43,8 @@ public class EmailService {
             log.info("OTP email sent to {}", toEmail);
 
         } catch (Exception e) {
-            log.error("Failed to send OTP email to {}: {}", toEmail, e.getMessage());
-            // Do NOT throw exception here. Allow registration to complete even if email
-            // fails.
+            log.error("Failed to send OTP email to {}", toEmail, e);
+            throw new RuntimeException("Failed to send OTP email", e);
         }
     }
 }

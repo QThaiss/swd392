@@ -46,8 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: " + e.getMessage());
-            e.printStackTrace(); // Debugging 403
+            logger.error("Cannot set user authentication", e);
         }
 
         filterChain.doFilter(request, response);

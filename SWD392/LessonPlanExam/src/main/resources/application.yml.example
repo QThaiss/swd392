@@ -1,14 +1,14 @@
 server:
-  port: 5206
+  port: ${SERVER_PORT:5206}
 
 spring:
   application:
     name: LessonPlanExam
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/lesson_plan_exam
-    username: YOUR_DB_USERNAME
-    password: YOUR_DB_PASSWORD
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:lesson_plan_exam}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: YOUR_EMAIL@gmail.com
-    password: YOUR_APP_PASSWORD
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -45,4 +45,11 @@ logging:
     org.springframework.security: INFO
 
 gemini:
-  api-key: YOUR_GEMINI_API_KEY
+  api-key: ${GEMINI_API_KEY:}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+    allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,PATCH,OPTIONS}
+    allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+    exposed-headers: ${CORS_EXPOSED_HEADERS:Authorization}

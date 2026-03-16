@@ -1,8 +1,13 @@
 package com.lessonplanexam.dto.account;
 
 import com.lessonplanexam.enums.EUserRole;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -30,4 +35,8 @@ public class RegisterRequest {
     private EUserRole role;
 
     private String schoolName;
+
+    private String studentCode;
+
+    private String major;
 }
